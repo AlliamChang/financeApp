@@ -6,7 +6,7 @@ import app
 
 class App_test(unittest.TestCase):
     def setUp(self):
-        self.app = app.createApp('testing')
+        self.app = app.create_app('testing')
         self.client = self.app.test_client()
 
     def test_user(self):
