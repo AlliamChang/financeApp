@@ -22,4 +22,7 @@ def create_app(config_name):
     from .credit_calculation import app as credit
     app.register_blueprint(credit, url_prefix='/credit')
 
+    from .standard_investment import app as investment
+    app.register_blueprint(investment, url_prefix='/investment')
+
     return app
