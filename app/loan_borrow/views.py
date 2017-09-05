@@ -161,16 +161,4 @@ def repay():
     return json.dumps(data)
 
 
-@app.route('/checkPhone', methods=['GET'])
-def check_phone():
-    data = {'code': 1, 'message': False}
-    phone = request.args.get('phone')
-    phone_code = int(request.args.get('verify_code'))
-    if phone in phoneList:
-        if phoneList[phone]==phone_code:
-            data['message']=True
-
-    data['code']=0
-    del phoneList[phone]
-    return json.dumps(data)
 
