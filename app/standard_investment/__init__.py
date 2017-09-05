@@ -3,4 +3,5 @@
 from flask import Blueprint
 
 app = Blueprint('standard_investment', __name__)
-from . import view
+
+from . import views

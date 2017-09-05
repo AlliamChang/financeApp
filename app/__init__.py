@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 def create_app(config_name):
@@ -14,7 +14,7 @@ def create_app(config_name):
     app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-    db.init_app(app)
+    # db.init_app(app)
 
     from .index import app as index
     app.register_blueprint(index, url_prefix='/index')
@@ -27,5 +27,8 @@ def create_app(config_name):
 
     from .standard_investment import app as investment
     app.register_blueprint(investment, url_prefix='/investment')
+
+    from .profile_management import app as profile
+    app.register_blueprint(profile, url_prefix='/profile')
 
     return app
