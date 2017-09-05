@@ -31,4 +31,7 @@ def create_app(config_name):
     from .profile_management import app as profile
     app.register_blueprint(profile, url_prefix='/profile')
 
+    from .activation import app as activation
+    app.register_blueprint(activation, url_prefix='/activation')
+
     return app
