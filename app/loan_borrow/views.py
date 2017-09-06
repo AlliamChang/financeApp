@@ -7,7 +7,7 @@ import json
 
 @app.route('/createBit', methods=['post'])
 def create_bit():
-    data = []
+    data = {}
     code = 0
     message = 'xxxx'
     bid_id = 'xxx'
@@ -20,7 +20,7 @@ def create_bit():
 
 @app.route('/finishBit', methods=['post'])
 def finish_bit():
-    data = []
+    data = {}
     code = 0
     message = 'xxxx'
     loan_id = 'xxx'
@@ -35,7 +35,7 @@ def finish_bit():
 
 @app.route('/cancelBit', methods=['post'])
 def cancel_Bit():
-    data = []
+    data = {}
     code = 0
     message = 'xxxx'
     data['code'] = code
@@ -46,22 +46,22 @@ def cancel_Bit():
 
 @app.route('/getRateRange', methods=['get'])
 def get_rate_range():
-    data = []
+    data = {}
     code = 0
     start_end = 3
     end_rate = 6
     message = 'xxxx'
     data['code'] = code
     data['message'] = message
-    data['start_end'] = 3
-    data['end_rate'] = 6
+    data['start_end'] = start_end
+    data['end_rate'] = end_rate
 
     return json.dumps(data)
 
 
 @app.route('/getMyBitList', methods=['get'])
 def get_my_bit_list():
-    data = []
+    data = {}
     code = 0
     message = 'xxxx'
     bid_ids = ['xxx', 'xxxx']
@@ -74,7 +74,7 @@ def get_my_bit_list():
 
 @app.route('/getBitDetail', methods=['GET'])
 def get_bit_detail():
-    data = []
+    data = {}
     code = 0
     message= 'xxxxx'
     bid_id = 'xxx'
@@ -112,7 +112,7 @@ def get_bit_detail():
 
 @app.route('/getAllLoans', methods=['GET'])
 def get_all_loans():
-    data = []
+    data = {}
     code = 0
     message = 'xxxxx'
     loans_id = ['xx', 'xx']
@@ -126,7 +126,7 @@ def get_all_loans():
 
 @app.route('/getLoanDetail', methods=['GET'])
 def get_loan_detail():
-    data = []
+    data = {}
 
     code = 0
     message = "xxxx"
@@ -153,7 +153,7 @@ def get_loan_detail():
 
 @app.route('repay', methods=['GET'])
 def repay():
-    data = []
+    data = {}
     code = 0
     message = 'xxxxx. '
     data['code'] = code
