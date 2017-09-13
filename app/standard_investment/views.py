@@ -2,7 +2,7 @@
 
 from . import app
 from flask import request
-# from app import db
+from app import db
 import json
 
 bid_list = []
@@ -74,5 +74,5 @@ def get_all_bids_list():
 
 
 def error_msg(msg):
-    error = {"code": 0, "message": msg}
+    error = {"code": 1, "message": msg}
     return json.dumps(error)
