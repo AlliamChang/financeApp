@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
-# db.init_app(app)
+db.init_app(app)
 #
 # from .index import app as index
 # app.register_blueprint(index, url_prefix='/index')

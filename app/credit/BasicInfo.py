@@ -4,7 +4,10 @@ from . import app
 from yunpian.SmsOperator import SmsOperator
 from flask import request
 from app import db
-from app import model
+from app.models.Progress import Progress
+from app.models.BankCard import BankCard
+from app.models.User import User
+from app.models.ConsumeRecord import ConsumeRecord
 from sqlalchemy import exc
 import random
 import json
@@ -56,8 +59,8 @@ def check_phone():
         result = '学号未知'
 
     if code == 0:
-        new_user = model.User(stdNo=std_no, phone=phone)
-        new_progress = model.Progress(phone=phone)
+        new_user = User(stdNo=std_no, phone=phone)
+        new_progress = Progress(phone=phone)
         try:
             db.session.add(new_user)
             db.session.add(new_progress)
@@ -84,6 +87,8 @@ def check_basic_data():
     father_name = request.args.get('fatherName')
     father_income = request.args.get('fatherIncome')
     father_job = request.args.get('fatherJob')
+    phone_price = request.args.get('phonePrice')
+    computer_price = request.args.get('computerPrice')
 
     identity_card_photo = request.files['identityCardPhoto']
     face_photo = request.files['facePhoto']
@@ -91,19 +96,21 @@ def check_basic_data():
     if identity_card_photo and face_photo:
         identity_card_photo.save('/identity/' + phone + '.jpg')
         face_photo.save('/face/' + phone + '.jpg')
+        code = 0
     else:
         code = 1
         result = '缺少照片'
 
-    if mother_job and mother_name and mother_income and father_job and father_income and father_name:
-        code = 0
-    else:
-        code = 1
-        result = '信息不完整'
+    if code == 0:
+        if mother_job and mother_name and mother_income and father_job and father_income and father_name:
+            code = 0
+        else:
+            code = 1
+            result = '信息不完整'
 
     if code == 0:
-        user = model.User.query.filter_by(phone=phone).first()
-        progress = model.Progress.query.filter_by(phone=phone).first()
+        user = User.query.filter_by(phone=phone).first()
+        progress = Progress.query.filter_by(phone=phone).first()
         if user:
             user.motherName = mother_name
             user.motherIncome = mother_income
@@ -137,8 +144,8 @@ def add_bank_card():
     bank_card = request.args.get('bank_card')
 
     if phone and bank_card:
-        new_bank_card = model.BankCard(phone=phone, bankCard=bank_card)
-        progress = model.Progress.query.filter_by(phone=phone).first()
+        new_bank_card = BankCard(phone=phone, bankCard=bank_card)
+        progress = Progress.query.filter_by(phone=phone).first()
         progress.hasBankAuth = True
         try:
             db.session.add(new_bank_card)
@@ -158,6 +165,10 @@ def add_bank_card():
     else:
         code = 1
         result = '缺少信息'
+
+    if code == 0:
+        # 获取银行卡消费记录
+        pass
 
     data = {'code': code, 'message': result}
     return json.dumps(data)
