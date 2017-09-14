@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://p2p:p2p@120.27.199.164:3306/p2p
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-db.init_app(app)
+# db.init_app(app)
 
 # db.init_app(app)
 #
