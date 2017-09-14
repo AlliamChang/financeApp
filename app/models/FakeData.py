@@ -18,9 +18,9 @@ scholarship2 = Scholarship(scholarID=1, stdNo='151250000', scholarTime=datetime.
 
 
 volunteer = Volunteer(volunteerID=1, stdNo='151250000', starttime=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                      duration=3, activity='hand bag', volunteercol='活动')
+                      duration=3, activity='羊山公园志愿', volunteercol='活动')
 volunteer2 = Volunteer(volunteerID=2, stdNo='151250000', starttime=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                       duration=3, activity='hand bag', volunteercol='活动')
+                       duration=3, activity='羊山公园志愿', volunteercol='活动')
 
 db.session.add(scholarship)
 db.session.add(volunteer)

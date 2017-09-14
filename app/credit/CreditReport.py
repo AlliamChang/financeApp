@@ -3,8 +3,10 @@
 from . import app
 import json
 from flask import request
-from ..models.User import User
-from app import db
+from app.models.User import User
+from app.models.Scholarship import Scholarship
+from app.models.Volunteer import Volunteer
+from app.models.Progross import Progross
 
 
 @app.route('/getCreditReport', methods=['GET'])
@@ -12,6 +14,8 @@ def get_credit_report():
 
     phone = request.args.get('phone')
     user = User.query.filter_by(phone=phone).first()
+    scholarship = Scholarship.query.filter_by(stdNo=user.stdNo)
+    volunteer = Volunteer.query.filter_by(stdNo=user.stdNo)
     
     basic_data = [{
         'name': user.name,
@@ -32,30 +36,38 @@ def get_credit_report():
         'gpa': user.gpa,
     }]
 
-    scholarship_data = [{
-        'date': '2016-07-18',
-        'name': '人民奖学金二等奖',
-        'cost': '￥2000.0',
-    }]
+    scholarship_data = []
+    for scholar in scholarship:
+        scho = {}
+        scho['date'] = scholar.scholarTime
+        scho['name'] = scholar.type
+        scho['cost'] = scholar.money
+        scholarship_data.append(scho)
 
+    volunteer_data = []
+    for volunteer in volunteer:
+        volun_temp = {}
+        volun_temp['date'] = volunteer.starttime
+        volun_temp['name'] = volunteer.activity
+        volun_temp['period'] = volunteer.duration
+        volunteer_data.append(volun_temp)
 
+    data = [basic_data, eduInfo_data, scholarship_data, volunteer_data]
 
-
-
-    data = {'code': 0, 'message':'success','idCard': 345245233458759837,'stdNo': 151250000, 'name': '黄小白'
-            , 'school': '', 'major': '', 'grade': '', 'gpa': '', 'home': '', 'motherName': '', 'motherIncome': ''
-            , 'motherJob': '', 'fatherName': '', 'fatherIncome': '', 'fatherJob': ''
-            , 'zhiMaCredit': '', 'consumeRecord': '', 'volunteerRecord': '', 'scholarship': ''
-            }
-
-    return json.dumps(data)
+    return json.dumps(data, default=str)
 
 
 @app.route('/getCheckState', methods=['GET'])
 def get_check_state():
-    data = {'code': 0, 'message': 'success', 'hasBasicAuth': False, 'hasSchoolAuth': True, 'hasBankAuth': True
-            , 'hasZhiMaAuth': False, 'hasAllAuth': True
-            }
+    data = {}
+    phone = request.args.get('phone')
+    state = Progross.query.filter_by(phone=phone).first()
+    if state is None:
+        return 'can not find user'
+    else:
+        data = {'code': 0, 'message': 'success', 'hasBasicAuth': state.hasBasicAuth, 'hasSchoolAuth': state.hasSchoolAuth, 'hasBankAuth': state.hasBankAuth
+                , 'hasZhiMaAuth': state.hasZhiMaAuth, 'hasAllAuth': state.hasAllAuth
+                }
     return json.dumps(data)
 
 
