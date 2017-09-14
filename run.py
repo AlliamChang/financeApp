@@ -1,3 +1,4 @@
+import app
 from flask_script import Manager
 import app
 
