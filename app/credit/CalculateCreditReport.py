@@ -1,0 +1,143 @@
+# -*- coding:utf-8 -*-
+
+from app.models.User import User
+from app.models.Scholarship import Scholarship
+from app.models.Volunteer import Volunteer
+from app.models.Punishment import Punishment
+from app.models.ConsumeRecord import ConsumeRecord
+from app.models.BankCard import BankCard
+from app.models.Guarantor import Guarantor
+from app.models.MapGuarantor import MapGuarantor
+from app.models.DefaultRate import DefaultRate
+
+
+def judgeSex(sex):
+    if sex == 0:
+        return 3
+    else:
+        return 4
+
+
+# 判断年龄 未成年：-1	 18-21：0	21+：1
+def judgeAge(age):
+    if age < 18:
+        return -1
+    elif 18 <= age <= 21:
+        return 0
+    else:
+        return 1
+
+
+# 判断学校 985 4	 211 3	 一般一本 2	 其他 1
+def judgeSchool(school):
+    return 4
+
+
+# 判断专业 热门 6	 一般 4	冷门 2
+def judgeMajor(major):
+    return 6
+
+
+# 判断成绩 优秀 9	良好 7	中等 5	较差 3	差 1
+def judgeGpa(gpa):
+    return 7
+
+
+# 判断奖学金类型 国奖/校级 7	一等 5 	二等 3	三等 2
+def judgeScholarshipType(scholarship):
+    return 7
+
+
+# 判断月生活费水平／千元
+def judgeLivingCost(bank_card):
+    consume_record = ConsumeRecord.query.filter_by(bankCard=bank_card.bankCard)
+    return 1.5
+
+
+# 判断奖助学金/学年／千元
+def judgeScholarshipNum(scholarship):
+    return 3
+
+
+# 判断奖助学金/学年／千元
+def judgePartTimeIncome(phone):
+    return 0.5
+
+
+# 判断生源地gdp/万元
+def judgeHomeGdp(home):
+    return 0.5
+
+
+# 判断处分情况 警告：-1	记过：-2	留校察看：-3	开除：-4
+def judgePunishment(punishment):
+    return 0
+
+
+# 判断志愿时长 无：0	0-10：1	10-20：2	20+：3
+def judgeVolunteer(volunteer):
+    return 0
+
+
+# 判断芝麻信用   较差：-4	中等：-2	良好：0	优秀：2	极好：4
+def judgeZhiMaCredit(zhima):
+    return 2
+
+
+def percentNormalize(percent):
+    return 100-percent*100
+
+
+def dataNormalize(data):
+    return 100-data*0.2
+
+
+def calculate(phone):
+    data = []
+    user = User.query.filter_by(phone=phone).first()
+    volunteer = Volunteer.query.filter_by(stdNo=user.stdNo)
+    scholarship = Scholarship.query.filter_by(stdNo=user.stdNo)
+    punishment = Punishment.query.filter_by(phone=phone)
+
+    bank_card = BankCard.query.filter_by(phone=phone)
+
+    map_guarantor = MapGuarantor.query.filter_by(phone=phone)
+    guarantor = Guarantor.query.filter_by(idCard=user.idCard)
+
+    default_rate = DefaultRate.query.filter_by(school=user.school)
+
+    data[0] = judgeSex(user.sex)
+    # 年龄 身份证那边获取
+    # data[1] = judgeAge(age)
+    # 学历 教务网那边获取
+    # data[2] = user.education
+    data[3] = judgeSchool(user.school)
+    data[4] = judgeMajor(user.major)
+    data[5] = judgeGpa(user.gpa)
+    data[6] = judgeScholarshipType(scholarship)
+    data[7] = judgeLivingCost(bank_card)
+    data[8] = judgeScholarshipNum(scholarship)
+    data[9] = judgePartTimeIncome(phone)
+    data[10] = float(user.phonePrice + user.computerPrice) / 1000
+    data[11] = float(user.motherIncome + user.fatherIncome) / 10000
+    data[12] = judgeHomeGdp(user.home)
+    data[13] = percentNormalize(default_rate.historyDefault)
+    data[14] = dataNormalize(default_rate.guaranteePercent)
+    data[15] = judgePunishment(punishment)
+    data[16] = judgeVolunteer(volunteer)
+    # 担保人担保额度（千元）（1）
+    data[17] = float(guarantor.guaranteeMoney)/1000
+    # 借款额度（千元）/期限（月）比值（1）
+    data[18] = guarantor.guaranteePercent
+    data[19] = judgeZhiMaCredit(user.zhiMaCredit)
+    net(data)
+
+
+def net(data):
+    return
+
+
+
+
+
+
