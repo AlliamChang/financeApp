@@ -1,13 +1,13 @@
 # encoding:utf-8
 
 from . import app
-from yunpian.SmsOperator import SmsOperator
+# from yunpian.SmsOperator import SmsOperator
 from flask import request
 from app import db
 from app.models.Progress import Progress
 from app.models.BankCard import BankCard
 from app.models.User import User
-from app.models.ConsumeRecord import ConsumeRecord
+# from app.models.ConsumeRecord import ConsumeRecord
 from sqlalchemy import exc
 import random
 import json
