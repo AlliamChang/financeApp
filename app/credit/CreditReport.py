@@ -3,21 +3,21 @@
 from . import app
 import json
 from flask import request
-from ..models import User
+from ..models.User import User
 from app import db
 
 
 @app.route('/getCreditReport', methods=['GET'])
 def get_credit_report():
 
-    photo = request.args.get('photo')
-    user = User.query.filter_by(photo=photo).first()
-
+    phone = request.args.get('phone')
+    user = User.query.filter_by(phone=phone).first()
+    
     basic_data = [{
         'name': user.name,
-        'IDCard': user.IDCard,
+        'IDCard': user.idCard,
         'home': user.home,
-        'ZhiMaCredit': user.ZhiMaCredit,
+        'ZhiMaCredit': user.zhiMaCredit,
         'father_occupation': user.fatherJob,
         'father_revenue': user.fatherIncome,
         'mother_occupation': user.motherJob,
