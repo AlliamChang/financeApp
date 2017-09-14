@@ -10,10 +10,38 @@ class Login(db.Model):
 
 
 class BankCard(db.Model):
-    __tablename__ = 'bank_card_info'
-    user_id = db.Column(db.String(50), primary_key=True)
-    bank_card_number = db.Column(db.String(19), primary_key=True)
-    description = db.Column(db.String(50))
+    __tablename__ = 'bankCard'
+    phone = db.Column(db.String(20), primary_key=True)
+    bankCard = db.Column(db.String(30), nullable=False)
+
+
+class User(db.Model):
+    __tablename__ = 'user'
+    phone = db.Column(db.String(20), primary_key=True)
+    idCard = db.Column(db.String(30), default='')
+    stdNo = db.Column(db.String(30), nullable=False)
+    name = db.Column(db.String(30), default='')
+    school = db.Column(db.String(30), default='')
+    major = db.Column(db.String(50), default='')
+    grade = db.Column(db.Integer, default=1)
+    gpa = db.Column(db.String(20), default='')
+    home = db.Column(db.String(100), default='')
+    motherName = db.Column(db.String(30), default='')
+    motherIncome = db.Column(db.Integer, default=0)
+    motherJob = db.Column(db.String(30), default='')
+    fatherName = db.Column(db.String(30), default='')
+    fatherIncome = db.Column(db.Integer, default=0)
+    fatherJob = db.Column(db.String(30), default='')
+    zhiMaCredit = db.Column(db.Integer, default=0)
+
+
+class Progress(db.Model):
+    phone = db.Column(db.String(20), primary_key=True)
+    hasBasicAuth = db.Column(db.Boolean, default=False)
+    hasSchoolAuth = db.Column(db.Boolean, default=False)
+    hasBankAuth = db.Column(db.Boolean, default=False)
+    hasZhiMaAuth = db.Column(db.Boolean, default=False)
+    hasAllAuth = db.Column(db.Boolean, default=False)
 
 
 class LoanInfo(db.Model):

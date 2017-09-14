@@ -1,17 +1,35 @@
 # encoding:utf-8
 
 from . import app
+from yunpian.SmsOperator import SmsOperator
 from flask import request
+from app import db
+from app import model
+from sqlalchemy import exc
+import random
 import json
 
-verify = '666666'
+APIKEY = '5ef620f90b6e812f4b4527a63f973f2c'
+msg1 = '【花旗杯】您的验证码是'
+msg2 = '。如非本人操作，请忽略本短信'
+verify_dict = {}
 
 
 @app.route('/sendPhoneCode', methods=['POST'])
 def send_phone_code():
     phone = request.args.get('phone')
 
-    data = {'code': 0, 'message': 'success', 'verifyCode': verify}
+    verify = make_code()
+    # 短信验证
+    # smsOperator = SmsOperator(APIKEY)
+    # result = smsOperator.single_send({'mobile': '15996259171', 'text': msg1+verify+msg2})
+    # print(json.dumps(result.content, ensure_ascii=False))
+
+    if phone and len(phone) == 11:
+        verify_dict[phone] = verify
+        data = {'code': 0, 'message': 'success', 'verifyCode': verify}
+    else:
+        data = {'code': 1, 'message': '手机号有误'}
     return json.dumps(data)
 
 
@@ -21,11 +39,39 @@ def check_phone():
     phone = request.args.get('phone')
     verify_code = request.args.get('verifyCode')
 
+    code = 0
     result = 'success'
-    if verify != verify_code:
-        result = 'wrong'
+    if phone and phone in verify_dict:
+        if verify_code != verify_dict[phone]:
+            result = '验证码错误'
+            code = 1
+        else:
+            del verify_dict[phone]
+    else:
+        code = 1
+        result = '手机号码未申请验证'
 
-    data = {'code': 0, 'message': result}
+    if std_no is None:
+        code = 1
+        result = '学号未知'
+
+    if code == 0:
+        new_user = model.User(stdNo=std_no, phone=phone)
+        new_progress = model.Progress(phone=phone)
+        try:
+            db.session.add(new_user)
+            db.session.add(new_progress)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            result = '该手机号已被注册'
+            code = 1
+        except Exception:
+            db.session.rollback()
+            result = '网络错误'
+            code = 1
+
+    data = {'code': code, 'message': result}
     return json.dumps(data)
 
 
@@ -42,19 +88,78 @@ def check_basic_data():
     identity_card_photo = request.files['identityCardPhoto']
     face_photo = request.files['facePhoto']
 
-    identity_card_photo.save('identity/' + phone + '.jpg')
-    face_photo.save('face/' + phone + '.jpg')
+    if identity_card_photo and face_photo:
+        identity_card_photo.save('/identity/' + phone + '.jpg')
+        face_photo.save('/face/' + phone + '.jpg')
+    else:
+        code = 1
+        result = '缺少照片'
 
-    data = {'code': 0, 'message': 'success'}
+    if mother_job and mother_name and mother_income and father_job and father_income and father_name:
+        code = 0
+    else:
+        code = 1
+        result = '信息不完整'
+
+    if code == 0:
+        user = model.User.query.filter_by(phone=phone).first()
+        progress = model.Progress.query.filter_by(phone=phone).first()
+        if user:
+            user.motherName = mother_name
+            user.motherIncome = mother_income
+            user.motherJob = mother_job
+            user.fatherName = father_name
+            user.fatherIncome = father_income
+            user.fatherJob = father_job
+            progress.hasBasicAuth = True
+            try:
+                db.session.add(user)
+                db.session.add(progress)
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+                result = '网络错误'
+                code = 1
+            else:
+                result = 'success'
+                code = 0
+        else:
+            code = 1
+            result = '该手机号尚未注册'
+
+    data = {'code': code, 'message': result}
     return json.dumps(data)
 
 
 @app.route('/addBankCard', methods=['POST'])
 def add_bank_card():
-    std_no = request.args.get('stdNo')
+    phone = request.args.get('phone')
     bank_card = request.args.get('bank_card')
 
-    data = {'code': 0, 'message': 'success'}
+    if phone and bank_card:
+        new_bank_card = model.BankCard(phone=phone, bankCard=bank_card)
+        progress = model.Progress.query.filter_by(phone=phone).first()
+        progress.hasBankAuth = True
+        try:
+            db.session.add(new_bank_card)
+            db.session.add(progress)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            result = '该号码已绑定过银行卡'
+            code = 1
+        except Exception:
+            db.session.rollback()
+            result = '网络错误'
+            code = 1
+        else:
+            result = 'success'
+            code = 0
+    else:
+        code = 1
+        result = '缺少信息'
+
+    data = {'code': code, 'message': result}
     return json.dumps(data)
 
 
@@ -64,3 +169,10 @@ def confirm_zhi_ma_credit():
 
 def get_check_state():
     pass
+
+
+def make_code():
+    verify = ''
+    for i in range(6):
+        verify += str(random.randint(0,9))
+    return verify
