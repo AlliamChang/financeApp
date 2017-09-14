@@ -32,6 +32,12 @@ def get_credit_report():
         'gpa': user.gpa,
     }]
 
+    scholarship_data = [{
+        'date': '2016-07-18',
+        'name': '人民奖学金二等奖',
+        'cost': '￥2000.0',
+    }]
+
 
 
 
