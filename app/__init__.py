@@ -2,8 +2,10 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import *
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = 'M*qaEYfBjdOg*Ja#'
 # 按照你们数据库配置来修改此项 mysql://用户名:密码@服务器地址:端口号/数据库名称
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://p2p:p2p@120.27.199.164:3306/p2p'
