@@ -34,6 +34,6 @@ db = SQLAlchemy(app)
 # from .activation import app as activation
 # app.register_blueprint(activation, url_prefix='/activation')
 
-from .credit import app as credit
+from app.credit import app as credit
 app.register_blueprint(credit, url_prefix='/credit')
 

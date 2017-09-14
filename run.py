@@ -1,6 +1,5 @@
-import app
 from flask_script import Manager
-import app
+from app import app
 
 manager = Manager(app)
 manager.run()
