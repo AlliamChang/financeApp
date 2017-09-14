@@ -2,8 +2,8 @@
 from app import db
 
 
-class Progross(db.Model):
-    __tablename__ = 'progross'
+class Progress(db.Model):
+    __tablename__ = 'progress'
     phone = db.Column(db.String, nullable=False, primary_key=True)
     hasBasicAuth = db.Column(db.String, nullable=False, default=0)
     hasSchoolAuth = db.Column(db.String, nullable=False, default=0)
@@ -12,4 +12,4 @@ class Progross(db.Model):
     hasAllAuth = db.Column(db.String, nullable=False, default=0)
 
     def __repr__(self):
-        return '<Progross %r>' % self.name
+        return '<Progress %r>' % self.name

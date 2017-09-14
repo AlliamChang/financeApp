@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from app import db
-from app.models.Progross import Progross
+from app.models.Progress import Progross
 from app.models.Punishment import Punishment
 from app.models.Scholarship import Scholarship
 from app.models.BankCard import BankCard

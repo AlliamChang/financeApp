@@ -6,7 +6,7 @@ from flask import request
 from app.models.User import User
 from app.models.Scholarship import Scholarship
 from app.models.Volunteer import Volunteer
-from app.models.Progross import Progross
+from app.models.Progress import Progress
 
 
 @app.route('/getCreditReport', methods=['GET'])
@@ -61,7 +61,7 @@ def get_credit_report():
 def get_check_state():
     data = {}
     phone = request.args.get('phone')
-    state = Progross.query.filter_by(phone=phone).first()
+    state = Progress.query.filter_by(phone=phone).first()
     if state is None:
         return 'can not find user'
     else:
