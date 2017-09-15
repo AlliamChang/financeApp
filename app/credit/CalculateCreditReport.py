@@ -120,7 +120,7 @@ def calculate(phone):
     user = User.query.filter_by(phone=phone).first()
     volunteer = Volunteer.query.filter_by(stdNo=user.stdNo).all()
     scholarship = Scholarship.query.filter_by(stdNo=user.stdNo).all()
-    punishment = Punishment.query.filter_by(phone=phone).all()
+    # punishment = Punishment.query.filter_by(phone=phone).all()
 
     bank_card = BankCard.query.filter_by(phone=phone).all()
 
@@ -149,7 +149,7 @@ def calculate(phone):
     data[11] = judgeHomeGdp(user.home)
     data[12] = percentNormalize(default_rate.historyDefault)
     data[13] = dataNormalize(default_rate.defaultMoneyPer)
-    data[14] = judgePunishment(punishment)
+    data[14] = judgePunishment("")
     data[15] = judgeVolunteer(volunteer)
     data[16] = judgeZhiMaCredit(user.zhiMaCredit)
     data[17] = 0  # 是否违约
