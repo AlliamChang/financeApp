@@ -80,10 +80,13 @@ def get_check_state():
 def confirm_zhima_credit():
     phone = request.args.get('phone')
     user = User.query.filter_by(phone=phone).first()
+    progress = Progress.query.filter_by(phone=phone).first()
     if user:
         try:
             user.zhiMaCredit = random.randint(400, 700)
+            progress.hasZhiMaAuth = 1
             db.session.add(user)
+            db.session.add(progress)
             db.session.commit()
             data = {'code': 0, 'message': 'success'}
         except Exception:
