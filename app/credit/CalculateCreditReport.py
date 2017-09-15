@@ -116,7 +116,7 @@ def dataNormalize(data):
 
 
 def calculate(phone):
-    data = []
+    data = [0] * 18
     user = User.query.filter_by(phone=phone).first()
     volunteer = Volunteer.query.filter_by(stdNo=user.stdNo).all()
     scholarship = Scholarship.query.filter_by(stdNo=user.stdNo).all()
