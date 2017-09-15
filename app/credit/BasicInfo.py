@@ -184,17 +184,12 @@ def add_bank_card():
                 db.session.add(new_bank_card)
                 db.session.add(progress)
                 db.session.commit()
-            except exc.IntegrityError:
-                db.session.rollback()
-                result = '该号码已绑定过银行卡'
-                code = 1
-            except Exception:
-                db.session.rollback()
-                result = '网络错误'
-                code = 1
-            else:
                 result = 'success'
                 code = 0
+            except Exception:
+                db.session.rollback()
+                result = '错误'
+                code = 1
         else:
             code = 1
             result = '不存在该手机号码'
