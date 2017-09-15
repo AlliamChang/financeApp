@@ -12,7 +12,7 @@ import random
 from app import db
 
 homeList = ('上海', '江苏', '浙江', '安徽', '北京', '天津', '广东', '河北', '河南', '山东', '湖北', '湖南', '江西', '福建', '四川', '重庆', '广西', '山西',
-        '辽宁', '吉林', '黑龙江', '贵州', '陕西', '云南', '内蒙古', '甘肃', '青海', '宁夏', '新疆', '海南', '西藏', '香港', '澳门', '台湾')
+            '辽宁', '吉林', '黑龙江', '贵州', '陕西', '云南', '内蒙古', '甘肃', '青海', '宁夏', '新疆', '海南', '西藏', '香港', '澳门', '台湾')
 majorList = ('中国语言文学', '数学', '物理学', '天文学', '化学', '计算机科学与技术', '地质学', '生物学')
 activity = ('暑假绿植代养活动', '迎新', ' 图书馆、档案馆义工', '志愿者')
 moneyList = ('5000', '3000', '2000', '800', '4000')
@@ -22,13 +22,10 @@ moneyList = ('5000', '3000', '2000', '800', '4000')
 def defineAcademicSystem():
     data = {'code': 0, 'message': 'success'}
     stdNo = request.args.get('stdNo')
-    password=request.args.get('password')
+    password = request.args.get('password')
     # stdNo='151250000'
-
     user = User.query.filter_by(stdNo=stdNo).first()
-
-    phone=user.phone
-
+    phone = user.phone
 
     if user:
         try:
@@ -81,17 +78,16 @@ def defineAcademicSystem():
 
                 db.session.add(scholarship)
 
-            progress=Progress.query.filter_by(phone=phone).first()
+            progress = Progress.query.filter_by(phone=phone).first()
 
-            progress.hasSchoolAuth=1
+            progress.hasSchoolAuth = 1
             db.session.add(progress)
 
             db.session.commit()
-        except Exception,e:
+        except Exception, e:
             print e
             db.session.rollback()
             data['message'] = '网络错误'
             data['code'] = 1
 
     return json.dumps(data)
-

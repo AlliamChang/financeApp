@@ -16,7 +16,7 @@ import os
 import json
 
 APIKEY = '5ef620f90b6e812f4b4527a63f973f2c'
-msg1 = '【花旗杯】您的验证码是'
+msg1 = '【未来信】您的验证码是'
 msg2 = '。如非本人操作，请忽略本短信'
 verify_dict = {}
 
