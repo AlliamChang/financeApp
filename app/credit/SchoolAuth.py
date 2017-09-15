@@ -2,6 +2,7 @@
 import datetime
 from flask import request
 
+from app.models.Progress import Progress
 from app.models.User import User
 from app.models.Scholarship import Scholarship
 from app.models.Volunteer import Volunteer
@@ -20,11 +21,13 @@ moneyList = ('5000', '3000', '2000', '800', '4000')
 @app.route('/academicSystem', methods=['GET'])
 def defineAcademicSystem():
     data = {'code': 0, 'message': 'success'}
-    stdNo = request.args.get('stdNo')
-    password=request.args.get('password')
-    # stdNo='151250000'
+    # stdNo = request.args.get('stdNo')
+    # password=request.args.get('password')
+    stdNo='151250000'
 
     user = User.query.filter_by(stdNo=stdNo).first()
+
+    phone=user.phone
 
 
     if user:
@@ -78,11 +81,16 @@ def defineAcademicSystem():
 
                 db.session.add(scholarship)
 
+            progress=Progress.query.filter_by(phone=phone).first()
+
+            progress.hasSchoolAuth=1
+            db.session.add(progress)
+
             db.session.commit()
         except Exception,e:
-            # print e
+            print e
             db.session.rollback()
-            data['result'] = '网络错误'
+            data['message'] = '网络错误'
             data['code'] = 1
 
     return json.dumps(data)
