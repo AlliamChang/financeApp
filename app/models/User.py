@@ -25,6 +25,7 @@ class User(db.Model):
     computerPrice = db.Column(db.Integer, nullable=False, default=0)
     age = db.Column(db.Integer, nullable=False, default=0)
     education = db.Column(db.Integer, nullable=False, default=2)
+    password = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.name

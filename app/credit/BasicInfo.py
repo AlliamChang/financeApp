@@ -156,7 +156,7 @@ def check_basic_data():
     return json.dumps(data)
 
 
-@app.route('/addBankCard', methods=['GET'])
+@app.route('/addBankCard', methods=['POST'])
 def add_bank_card():
     phone = request.form['phone']
     bank_card = request.form['bank_card']
