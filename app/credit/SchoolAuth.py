@@ -20,7 +20,7 @@ moneyList = ('5000', '3000', '2000', '800', '4000')
 
 @app.route('/academicSystem', methods=['POST'])
 def defineAcademicSystem():
-    data = {'code': 0, 'message': 'success'}
+    data = {'code': 1, 'message': 'failure'}
     stdNo = request.args.get('stdNo')
     password = request.args.get('password')
     # stdNo='151250000'
@@ -83,6 +83,8 @@ def defineAcademicSystem():
             db.session.add(progress)
 
             db.session.commit()
+            data['message'] = 'success'
+            data['code'] = 0
         except Exception, e:
             print e
             db.session.rollback()
