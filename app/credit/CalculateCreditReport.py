@@ -154,7 +154,7 @@ def calculate(phone):
     data[16] = judgeZhiMaCredit(user.zhiMaCredit)
     data[17] = 0  # 是否违约
     # return data
-    net(data)
+    return net(data)
 
 
 def guass(y):
