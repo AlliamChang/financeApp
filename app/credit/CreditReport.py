@@ -85,6 +85,7 @@ def confirm_zhima_credit():
         try:
             user.zhiMaCredit = random.randint(400, 700)
             progress.hasZhiMaAuth = 1
+            progress.hasAllAuth = 1
             db.session.add(user)
             db.session.add(progress)
             db.session.commit()

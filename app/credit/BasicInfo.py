@@ -141,6 +141,8 @@ def check_basic_data():
         user = User.query.filter_by(phone=phone).first()
         progress = Progress.query.filter_by(phone=phone).first()
         if user:
+            user.name = "张三"
+            user.idCard = "3203221992304059340"
             user.motherName = mother_name
             user.motherIncome = mother_income
             user.motherJob = mother_job
