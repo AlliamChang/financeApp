@@ -30,7 +30,7 @@ def login():
     if user is None:
         data = {'code': 1, 'message': '该账号未注册'}
     elif user.password == pwd:
-        data = {'code': 0, 'message': '登录成功'}
+        data = {'code': 0, 'message': 'success'}
     elif user.password != pwd:
         data = {'code': 1, 'message': '密码错误'}
     else:
