@@ -1,6 +1,8 @@
 # encoding:utf-8
 
 from . import app
+# from yunpian.SmsOperator import SmsOperator
+# import time
 from flask import request
 from app import db
 from app.models.Progress import Progress
@@ -17,6 +19,23 @@ APIKEY = '5ef620f90b6e812f4b4527a63f973f2c'
 msg1 = '【花旗杯】您的验证码是'
 msg2 = '。如非本人操作，请忽略本短信'
 verify_dict = {}
+
+
+@app.route('/login', methods=['POST'])
+def send_phone_code():
+    phone = request.form['phone']
+    pwd = request.form['password']
+    user = User.query.filter_by(phone=phone).first()
+
+    if user is None:
+        data = {'code': 1, 'message': '该账号未注册'}
+    elif user.password == pwd:
+        data = {'code': 0, 'message': '登录成功'}
+    elif user.password != pwd:
+        data = {'code': 1, 'message': '密码错误'}
+    else:
+        data = {'code': 1, 'message': '登录失败'}
+    return json.dumps(data)
 
 
 @app.route('/sendPhoneCode', methods=['POST'])
@@ -114,7 +133,7 @@ def check_basic_data():
             result = '缺少照片'
 
     if code == 0:
-        if mother_job and mother_name and mother_income and father_job and father_income and father_name\
+        if mother_job and mother_name and mother_income and father_job and father_income and father_name \
                 and computer_price and phone_price:
             code = 0
         else:
@@ -212,5 +231,5 @@ def get_check_state():
 def make_code():
     verify = ''
     for i in range(6):
-        verify += str(random.randint(0,9))
+        verify += str(random.randint(0, 9))
     return verify
