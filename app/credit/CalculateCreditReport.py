@@ -66,7 +66,6 @@ def judgeScholarshipType(scholarship):
 
 # 判断月生活费水平／千元
 def judgeLivingCost(bank_card):
-    consume_record = ConsumeRecord.query.filter_by(bankCard=bank_card.bankCard).all()
     flag = [0.5, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0]
     return flag[random_index([2, 10, 15, 20, 35, 10, 5, 3])]
 
