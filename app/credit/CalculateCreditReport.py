@@ -130,9 +130,9 @@ def calculate(phone):
 
     default_rate = DefaultRate.query.filter_by(school=user.school).first()
 
-    if (user is None) or (volunteer is None) or (scholarship is None) or (punishment is None) or (
-                bank_card is None) or (map_guarantor is None) or (guarantor is None) or (default_rate is None):
-        return None
+    # if (user is None) or (volunteer is None) or (scholarship is None) or (punishment is None) or (
+    #             bank_card is None) or (map_guarantor is None) or (guarantor is None) or (default_rate is None):
+    #     return None
 
     data[0] = judgeSex(user.sex)
     # 年龄 身份证那边获取
@@ -162,6 +162,6 @@ def calculate(phone):
     net(data)
 
 
-# 神经网络计算违约概率
+# 神经网络计算违约概率 然后转换为额度
 def net(data):
     return round(random.uniform(1, 10), 2)

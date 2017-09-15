@@ -1,7 +1,6 @@
 # encoding:utf-8
 
 from . import app
-from yunpian.SmsOperator import SmsOperator
 from flask import request
 from app import db
 from app.models.Progress import Progress
@@ -11,7 +10,6 @@ from app.models.ConsumeRecord import ConsumeRecord
 from datetime import *
 from sqlalchemy import exc
 import random
-import time
 import os
 import json
 
