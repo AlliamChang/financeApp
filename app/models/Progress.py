@@ -3,7 +3,7 @@ from app import db
 
 
 class Progress(db.Model):
-    __tablename__ = 'progress'
+    __tablename__ = 'progross'
     phone = db.Column(db.String, nullable=False, primary_key=True)
     hasBasicAuth = db.Column(db.Boolean, nullable=False, default=False)
     hasSchoolAuth = db.Column(db.Boolean, nullable=False, default=False)

@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from . import app
+from .CalculateCreditReport import calculate
 import json
 from flask import request
 from app.models.User import User
@@ -52,7 +53,9 @@ def get_credit_report():
         volun_temp['period'] = volunteer.duration
         volunteer_data.append(volun_temp)
 
-    data = [basic_data, eduInfo_data, scholarship_data, volunteer_data]
+    percent = calculate(phone)
+
+    data = [basic_data, eduInfo_data, scholarship_data, volunteer_data, percent]
 
     return json.dumps(data, default=str)
 

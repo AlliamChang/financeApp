@@ -9,7 +9,6 @@ class Volunteer(db.Model):
     starttime = db.Column(db.Date, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     activity = db.Column(db.String, nullable=False)
-    volunteercol = db.Column(db.String, nullable=False)
     __table_args__ = (
         db.PrimaryKeyConstraint('volunteerID', 'stdNo'),
     )

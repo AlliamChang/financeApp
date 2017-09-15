@@ -23,6 +23,8 @@ class User(db.Model):
     sex = db.Column(db.Integer, nullable=False, default=0)  # 男0女1
     phonePrice = db.Column(db.Integer, nullable=False, default=0)
     computerPrice = db.Column(db.Integer, nullable=False, default=0)
+    age = db.Column(db.Integer, nullable=False, default=0)
+    education = db.Column(db.Integer, nullable=False, default=2)
 
     def __repr__(self):
         return '<User %r>' % self.name
