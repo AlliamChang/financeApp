@@ -22,7 +22,7 @@ verify_dict = {}
 
 
 @app.route('/login', methods=['POST'])
-def send_phone_code():
+def login():
     phone = request.form['phone']
     pwd = request.form['password']
     user = User.query.filter_by(phone=phone).first()
