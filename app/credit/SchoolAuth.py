@@ -25,9 +25,8 @@ def defineAcademicSystem():
     password = request.args.get('password')
     # stdNo='151250000'
     user = User.query.filter_by(stdNo=stdNo).first()
-    phone = user.phone
-
     if user:
+        phone = user.phone
         try:
             user.school = '南京大学'
             user.major = random.choice(majorList)
