@@ -58,10 +58,10 @@ def send_phone_code():
 
 @app.route('/checkPhone', methods=['POST'])
 def check_phone():
-    std_no = request.args.get('stdNo')
-    phone = request.args.get('phone')
-    verify_code = request.args.get('verifyCode')
-    password = request.args.get('password')
+    std_no = request.values.get('stdNo')
+    phone = request.values.get('phone')
+    verify_code = request.values.get('verifyCode')
+    password = request.values.get('password')
 
     code = 0
     result = 'success'
@@ -142,7 +142,7 @@ def check_basic_data():
         progress = Progress.query.filter_by(phone=phone).first()
         if user:
             user.name = "张三"
-            user.idCard = "3203221992304059340"
+            user.idCard = "320322199230409340"
             user.motherName = mother_name
             user.motherIncome = mother_income
             user.motherJob = mother_job

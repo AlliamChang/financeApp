@@ -122,10 +122,6 @@ def calculate(phone):
     # punishment = Punishment.query.filter_by(phone=phone).all()
 
     bank_card = BankCard.query.filter_by(phone=phone).all()
-
-    # map_guarantor = MapGuarantor.query.filter_by(phone=phone).first()
-    # guarantor = Guarantor.query.filter_by(idCard=user.idCard).all()
-
     default_rate = DefaultRate.query.filter_by(school=user.school).first()
 
     # if (user is None) or (volunteer is None) or (scholarship is None) or (punishment is None) or (
