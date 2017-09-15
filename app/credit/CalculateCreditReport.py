@@ -6,10 +6,9 @@ from app.models.Volunteer import Volunteer
 from app.models.Punishment import Punishment
 from app.models.ConsumeRecord import ConsumeRecord
 from app.models.BankCard import BankCard
-from app.models.Guarantor import Guarantor
-from app.models.MapGuarantor import MapGuarantor
 from app.models.DefaultRate import DefaultRate
 import random
+import math
 
 
 def random_index(rate):
@@ -125,8 +124,8 @@ def calculate(phone):
 
     bank_card = BankCard.query.filter_by(phone=phone).all()
 
-    map_guarantor = MapGuarantor.query.filter_by(phone=phone).first()
-    guarantor = Guarantor.query.filter_by(idCard=user.idCard).all()
+    # map_guarantor = MapGuarantor.query.filter_by(phone=phone).first()
+    # guarantor = Guarantor.query.filter_by(idCard=user.idCard).all()
 
     default_rate = DefaultRate.query.filter_by(school=user.school).first()
 
@@ -136,9 +135,9 @@ def calculate(phone):
 
     data[0] = judgeSex(user.sex)
     # 年龄 身份证那边获取
-    # data[1] = judgeAge(age)
+    data[1] = judgeAge(user.age)
     # 学历 教务网那边获取
-    # data[2] = user.education
+    data[2] = user.education
     data[3] = judgeSchool(user.school)
     data[4] = judgeMajor(user.major)
     data[5] = judgeGpa(user.gpa)
@@ -146,22 +145,36 @@ def calculate(phone):
     data[7] = judgeLivingCost(bank_card)
     data[8] = judgeScholarshipNum(scholarship)
     data[9] = judgePartTimeIncome(phone)
-    data[10] = float(user.phonePrice + user.computerPrice) / 1000
-    data[11] = float(user.motherIncome + user.fatherIncome) / 10000
-    data[12] = judgeHomeGdp(user.home)
-    data[13] = percentNormalize(default_rate.historyDefault)
-    data[14] = dataNormalize(default_rate.guaranteePercent)
-    data[15] = judgePunishment(punishment)
-    data[16] = judgeVolunteer(volunteer)
-    # 担保人担保额度（千元）（1）
-    data[17] = float(guarantor.guaranteeMoney) / 1000
-    # 借款额度（千元）/期限（月）比值（1）
-    data[18] = guarantor.guaranteePercent
-    data[19] = judgeZhiMaCredit(user.zhiMaCredit)
+    data[10] = float(user.motherIncome + user.fatherIncome) / 10000
+    data[11] = judgeHomeGdp(user.home)
+    data[12] = percentNormalize(default_rate.historyDefault)
+    data[13] = dataNormalize(default_rate.defaultMoneyPer)
+    data[14] = judgePunishment(punishment)
+    data[15] = judgeVolunteer(volunteer)
+    data[16] = judgeZhiMaCredit(user.zhiMaCredit)
+    data[17] = 0  # 是否违约
     # return data
     net(data)
 
 
+def guass(y):
+    return
+
+
 # 神经网络计算违约概率 然后转换为额度
-def net(data):
+def net(x):
+    y = []
+    y[0] = 0.25 * x[0] + 0.25 * x[1] + 0.5 * x[2]
+    y[1] = 0.17 * x[3] + 0.27 * x[4] + 0.38 * x[5] + 0.18 * x[6]
+    y[2] = 0.25 * x[7] + 0.33 * x[8] + 0.42 * x[9]
+    y[3] = 0.75 * x[10] + 0.25 * x[11]
+    y[4] = 0.65 * x[12] + 0.35 * x[13]
+    y[5] = 0.67 * x[14] + 0.33 * x[15]
+    y[6] = x[16]
+    y[7] = x[17]  # 是否违约
+
+    m = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    var = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    w = [0] * int(math.pow(2, len(y)-1))
+
     return round(random.uniform(1, 10), 2)

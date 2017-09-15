@@ -2,7 +2,7 @@
 
 from . import app
 # from yunpian.SmsOperator import SmsOperator
-# import time
+import time
 from flask import request
 from app import db
 from app.models.Progress import Progress
@@ -108,8 +108,6 @@ def check_basic_data():
     father_name = request.form['fatherName']
     father_income = request.form['fatherIncome']
     father_job = request.form['fatherJob']
-    phone_price = request.form['phonePrice']
-    computer_price = request.form['computerPrice']
 
     identity_card_photo = request.files['identityCardPhoto']
     face_photo = request.files['facePhoto']
@@ -133,8 +131,7 @@ def check_basic_data():
             result = '缺少照片'
 
     if code == 0:
-        if mother_job and mother_name and mother_income and father_job and father_income and father_name \
-                and computer_price and phone_price:
+        if mother_job and mother_name and mother_income and father_job and father_income and father_name:
             code = 0
         else:
             code = 1
@@ -150,8 +147,8 @@ def check_basic_data():
             user.fatherName = father_name
             user.fatherIncome = father_income
             user.fatherJob = father_job
-            user.computerPrice = computer_price
-            user.phonePrice = phone_price
+            user.computerPrice = 0
+            user.phonePrice = 0
 
             try:
                 db.session.add(user)
