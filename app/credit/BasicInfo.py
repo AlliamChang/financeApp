@@ -56,7 +56,7 @@ def send_phone_code():
     return json.dumps(data)
 
 
-@app.route('/checkPhone', methods=['GET'])
+@app.route('/checkPhone', methods=['POST'])
 def check_phone():
     std_no = request.args.get('stdNo')
     phone = request.args.get('phone')
@@ -172,8 +172,8 @@ def check_basic_data():
 
 @app.route('/addBankCard', methods=['POST'])
 def add_bank_card():
-    phone = request.form['phone']
-    bank_card = request.form['bank_card']
+    phone = request.values.get('phone')
+    bank_card = request.values.get('bank_card')
 
     if phone and bank_card:
         new_bank_card = BankCard(phone=phone, bankCard=bank_card)

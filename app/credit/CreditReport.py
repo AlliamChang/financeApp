@@ -3,11 +3,13 @@
 from . import app
 from .CalculateCreditReport import calculate
 import json
+import random
 from flask import request
 from app.models.User import User
 from app.models.Scholarship import Scholarship
 from app.models.Volunteer import Volunteer
 from app.models.Progress import Progress
+from app import db
 
 
 @app.route('/getCreditReport', methods=['GET'])
@@ -76,6 +78,18 @@ def get_check_state():
 
 @app.route('/confirm_ZhiMaCredit', methods=['GET'])
 def confirm_zhima_credit():
-    data = {'code': 0, 'message': 'success'}
+    phone = request.args.get('phone')
+    user = User.query.filter_by(phone=phone).first()
+    if user:
+        try:
+            user.zhiMaCredit = random.randint(400, 700)
+            db.session.add(user)
+            db.session.commit()
+            data = {'code': 0, 'message': 'success'}
+        except Exception:
+            db.session.rollback()
+            data = {'code': 1, 'message': 'failure'}
+    else:
+        data = {'code': 1, 'message': 'failure'}
     return json.dumps(data)
 

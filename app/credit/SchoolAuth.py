@@ -21,8 +21,8 @@ moneyList = ('5000', '3000', '2000', '800', '4000')
 @app.route('/academicSystem', methods=['POST'])
 def defineAcademicSystem():
     data = {'code': 1, 'message': 'failure'}
-    stdNo = request.args.get('stdNo')
-    password = request.args.get('password')
+    stdNo = request.values.get('stdNo')
+    password = request.values.get('password')
     # stdNo='151250000'
     user = User.query.filter_by(stdNo=stdNo).first()
     if user:
