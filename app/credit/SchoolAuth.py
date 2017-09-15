@@ -18,12 +18,12 @@ activity = ('暑假绿植代养活动', '迎新', ' 图书馆、档案馆义工'
 moneyList = ('5000', '3000', '2000', '800', '4000')
 
 
-@app.route('/academicSystem', methods=['GET'])
+@app.route('/academicSystem', methods=['POST'])
 def defineAcademicSystem():
     data = {'code': 0, 'message': 'success'}
-    # stdNo = request.args.get('stdNo')
-    # password=request.args.get('password')
-    stdNo='151250000'
+    stdNo = request.args.get('stdNo')
+    password=request.args.get('password')
+    # stdNo='151250000'
 
     user = User.query.filter_by(stdNo=stdNo).first()
 
