@@ -182,9 +182,14 @@ def add_bank_card():
         new_bank_card = BankCard(phone=phone, bankCard=bank_card)
         progress = Progress.query.filter_by(phone=phone).first()
         if progress:
-            progress.hasBankAuth = True
             try:
                 db.session.add(new_bank_card)
+                # 获取银行卡消费记录
+                for i in range(10):
+                    get = random.randint(1000, 2000)
+                    new_month = ConsumeRecord(bankCard=bank_card, consumeTime=date.today(), money=get,type=random.randint(0, 2))
+                    db.session.add(new_month)
+                progress.hasBankAuth = True
                 db.session.add(progress)
                 db.session.commit()
                 result = 'success'
@@ -199,17 +204,6 @@ def add_bank_card():
     else:
         code = 1
         result = '缺少信息'
-
-    # 获取银行卡消费记录
-    if code == 0:
-        flag = random.randint(10, 17)
-        get = random.randint(1000, 2000)
-        temp = 0
-        for i in range(4):
-            temp += get
-            new_month = ConsumeRecord(id=i, bankCard=bank_card, consumeTime=date.today(), money=get, type=0)
-            db.session.add(new_month)
-            db.session.commit()
 
     data = {'code': code, 'message': result}
     return json.dumps(data)
