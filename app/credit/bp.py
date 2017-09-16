@@ -17,5 +17,3 @@ def load_data():
     print d
 
 
-# dump_data()
-# load_data()
