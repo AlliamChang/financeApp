@@ -9,6 +9,9 @@ class ConsumeRecord(db.Model):
     consumeTime = db.Column(db.Date, nullable=False)
     money = db.Column(db.Float, nullable=False)
     type = db.Column(db.Integer, nullable=False)
+    __table_args__ = (
+        db.PrimaryKeyConstraint('recordid', 'bankCard'),
+    )
 
     def __repr__(self):
         return '<ConsumeRecord %r>' % self.name
