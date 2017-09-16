@@ -185,19 +185,23 @@ def add_bank_card():
             try:
                 db.session.add(new_bank_card)
                 # 获取银行卡消费记录
-                for i in range(10):
-                    get = random.randint(1000, 2000)
-                    new_month = ConsumeRecord(bankCard=bank_card, consumeTime=date.today(), money=get,type=random.randint(0, 2))
-                    db.session.add(new_month)
-                progress.hasBankAuth = True
-                db.session.add(progress)
-                db.session.commit()
-                result = 'success'
-                code = 0
-            except Exception, e:
-                print e
+                code = get_bank_record(bank_card)
+                if code == 0:
+                    progress.hasBankAuth = True
+                    db.session.add(progress)
+                    db.session.commit()
+                    result = 'success'
+                else:
+                    code = 1
+                    result = '添加银行记录失败'
+            except exc.IntegrityError:
+                code = 1
                 db.session.rollback()
-                result = '错误'
+                result = '该账号已添加过银行卡'
+            except Exception as e:
+                print(e)
+                db.session.rollback()
+                result = '网络错误'
                 code = 1
         else:
             code = 1
@@ -210,12 +214,39 @@ def add_bank_card():
     return json.dumps(data)
 
 
-def confirm_zhi_ma_credit():
-    pass
+def get_bank_record(bank_card):
+    code = 0
+    all = 0
+    month = random.randint(1000, 2000)
+    try:
+        for i in range(4):
+            all += month
+            new_month = ConsumeRecord(bankCard=bank_card, consumeTime=date.today(), money=month, type=0)
+            db.session.add(new_month)
+            for j in range(random.randint(2,5)):
+                if all == 0:
+                    break
+                type = random.randint(1, 2)
+                if type == 2:
+                    if all < 400:
+                        cost = random.randint(100, all)
+                    else:
+                        cost = random.randint(100, 400)
+                else:
+                    if all < 300:
+                        cost = random.randint(0, all)
+                    else:
+                        cost = random.randint(0, 300)
+                all -= cost
+                new_cost = ConsumeRecord(bankCard=bank_card, consumeTime=date.today(), money=cost, type=type)
+                db.session.add(new_cost)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        code = 1
 
-
-def get_check_state():
-    pass
+    return code
 
 
 def make_code():
