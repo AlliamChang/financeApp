@@ -72,14 +72,17 @@ def loss_func(y):
     return math.pow(f(y_input) - y_output, 2) / 2
 
 
-# 梯度函数 即损失函数关于参数求导
-def grad_func(y):
-    return 0.1
-
-
-# f的导数
-def f_derivative(param):
-    return 0.1
+# 梯度函数 即损失函数关于参数求导 待定
+# param_type 0:m 1:var 2:w
+def grad_func(y, i, j, param_type):
+    if param_type == 0:
+        # return 0.1 * f(y) * m[i][j]
+        return f(y) - w[i] * rule(y, i) + rule(y, i)
+    elif param_type == 1:
+        # return 0.2 * f(y) * var[i][j]
+        return f(y) - w[i] * rule(y, i) + rule(y, i)
+    else:
+        return f(y) - w[i] * rule(y, i) + rule(y, i)
 
 
 # 保存训练后参数
@@ -116,48 +119,57 @@ def load_param():
 epsilon = 0.0001
 # 学习率
 alpha = 0.01
+# 最大迭代次数
+max_iter = 100000
 
 
 def bpTrain(y):
+    cnt = 0
     while True:
-        # 用步长乘以损失函数的梯度，得到当前位置下降的距离
-        delta = alpha * grad_func(y)
-
+        cnt += 1
+        if cnt > max_iter:
+            return
+            # 用步长乘以损失函数的梯度，得到当前位置下降的距离
         # 确定是否所有的θi,梯度下降的距离都小于ε，如果小于ε则算法终止
         stop = True
         for i in range(len(m)):
             for j in range(2):
+                delta = alpha * grad_func(y, i, j, 0)
                 if m[i][j] - m_temp[i][j] > delta:
                     stop = False
                     break
-
         if stop:
             for i in range(len(var)):
                 for j in range(2):
+                    delta = alpha * grad_func(y, i, j, 1)
                     if var[i][j] - var_temp[i][j] > delta:
                         stop = False
                         break
-
         if stop:
             for i in range(len(w)):
+                delta = alpha * grad_func(y, i, 0, 3)
                 if w[i] - w_temp[i] > delta:
                     stop = False
                     break
 
+        # 更新所有的θ
         if not stop:
-            # 更新所有的θ
             for i in range(len(m)):
                 for j in range(2):
+                    delta = alpha * grad_func(y, i, j, 0)
                     m_temp[i][j] = m[i][j]
                     m[i][j] = m[i][j] - delta
 
             for i in range(len(var)):
                 for j in range(2):
+                    delta = alpha * grad_func(y, i, j, 1)
                     var_temp[i][j] = var[i][j]
                     var[i][j] = var[i][j] - delta
 
             for i in range(len(w)):
+                delta = alpha * grad_func(y, i, 0, 3)
                 w_temp[i] = w[i]
                 w[i] = w[i] - delta
         else:
+            dump_param()
             return
