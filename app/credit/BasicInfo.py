@@ -223,3 +223,4 @@ def make_code():
     for i in range(6):
         verify += str(random.randint(0, 9))
     return verify
+
