@@ -2,7 +2,6 @@
 
 from . import app
 # from yunpian.SmsOperator import SmsOperator
-import time
 from flask import request
 from app import db
 from app.models.Progress import Progress
@@ -151,6 +150,8 @@ def check_basic_data():
             user.fatherJob = father_job
             user.computerPrice = 0
             user.phonePrice = 0
+            user.sex = random.randint(0, 1)
+            user.age = random.randint(17, 27)
 
             try:
                 db.session.add(user)

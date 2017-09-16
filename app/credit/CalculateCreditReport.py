@@ -10,7 +10,6 @@ from app.models.DefaultRate import DefaultRate
 import random
 import math
 
-
 def random_index(rate):
     """随机变量的概率函数"""
     start = 0
@@ -73,13 +72,13 @@ def judgeLivingCost(bank_card):
 # 判断奖助学金/学年／千元
 def judgeScholarshipNum(scholarship):
     flag = [3, 4, 5, 6, 7, 8, 9]
-    return flag[random_index([2, 10, 15, 20, 35, 10, 5, 3])]
+    return flag[random_index([5, 10, 15, 20, 35, 10, 5])]
 
 
 # 判断兼职/月／千元
 def judgePartTimeIncome(phone):
     flag = [0.3, 0.5, 0.7, 0.9, 1.2, 1.5]
-    return flag[random_index([2, 10, 15, 20, 35, 10, 5, 3])]
+    return flag[random_index([2, 10, 15, 20, 43, 10])]
 
 
 # 判断生源地gdp/万元
@@ -116,13 +115,18 @@ def dataNormalize(data):
 
 def calculate(phone):
     data = [0] * 18
-    user = User.query.filter_by(phone=phone).first()
-    volunteer = Volunteer.query.filter_by(stdNo=user.stdNo).all()
-    scholarship = Scholarship.query.filter_by(stdNo=user.stdNo).all()
-    # punishment = Punishment.query.filter_by(phone=phone).all()
-
-    bank_card = BankCard.query.filter_by(phone=phone).all()
-    default_rate = DefaultRate.query.filter_by(school=user.school).first()
+    if phone:
+        user = User.query.filter_by(phone=phone).first()
+        if user:
+            volunteer = Volunteer.query.filter_by(stdNo=user.stdNo).all()
+            scholarship = Scholarship.query.filter_by(stdNo=user.stdNo).all()
+            punishment = Punishment.query.filter_by(phone=phone).all()
+            bank_card = BankCard.query.filter_by(phone=phone).all()
+            default_rate = DefaultRate.query.filter_by(school=user.school).first()
+        else:
+            return 0
+    else:
+        return 0
 
     # if (user is None) or (volunteer is None) or (scholarship is None) or (punishment is None) or (
     #             bank_card is None) or (map_guarantor is None) or (guarantor is None) or (default_rate is None):
@@ -144,7 +148,7 @@ def calculate(phone):
     data[11] = judgeHomeGdp(user.home)
     data[12] = percentNormalize(default_rate.historyDefault)
     data[13] = dataNormalize(default_rate.defaultMoneyPer)
-    data[14] = judgePunishment("")
+    data[14] = judgePunishment(punishment)
     data[15] = judgeVolunteer(volunteer)
     data[16] = judgeZhiMaCredit(user.zhiMaCredit)
     data[17] = 0  # 是否违约
