@@ -8,7 +8,7 @@ from app.models.ConsumeRecord import ConsumeRecord
 from app.models.BankCard import BankCard
 from app.models.DefaultRate import DefaultRate
 import random
-import math
+
 
 def random_index(rate):
     """随机变量的概率函数"""
