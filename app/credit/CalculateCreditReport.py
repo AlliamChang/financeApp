@@ -7,6 +7,7 @@ from app.models.Punishment import Punishment
 from app.models.ConsumeRecord import ConsumeRecord
 from app.models.BankCard import BankCard
 from app.models.DefaultRate import DefaultRate
+from .bp import net
 import random
 
 
@@ -151,29 +152,7 @@ def calculate(phone):
     data[14] = judgePunishment(punishment)
     data[15] = judgeVolunteer(volunteer)
     data[16] = judgeZhiMaCredit(user.zhiMaCredit)
-    data[17] = 0  # 是否违约
+    # data[17] = 0  # 是否违约
     # return data
     return net(data)
 
-
-def guass(y):
-    return
-
-
-# 神经网络计算违约概率 然后转换为额度
-def net(x):
-    # y = [0] *8
-    # y[0] = 0.25 * x[0] + 0.25 * x[1] + 0.5 * x[2]
-    # y[1] = 0.17 * x[3] + 0.27 * x[4] + 0.38 * x[5] + 0.18 * x[6]
-    # y[2] = 0.25 * x[7] + 0.33 * x[8] + 0.42 * x[9]
-    # y[3] = 0.75 * x[10] + 0.25 * x[11]
-    # y[4] = 0.65 * x[12] + 0.35 * x[13]
-    # y[5] = 0.67 * x[14] + 0.33 * x[15]
-    # y[6] = x[16]
-    # y[7] = x[17]  # 是否违约
-
-    # m = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-    # var = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
-    # w = [0] * int(math.pow(2, len(y)-1))
-
-    return round(random.uniform(1, 10), 2)
