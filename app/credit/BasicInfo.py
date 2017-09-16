@@ -194,7 +194,8 @@ def add_bank_card():
                 db.session.commit()
                 result = 'success'
                 code = 0
-            except Exception:
+            except Exception, e:
+                print e
                 db.session.rollback()
                 result = '错误'
                 code = 1
